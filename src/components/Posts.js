@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import InstaService from '../services/instaService'
-import User from './User'
+import User from './User';
+import ErrorMessage from './Error'
 
 
 export default class Posts extends Component {
@@ -42,12 +43,13 @@ export default class Posts extends Component {
         this.setState({
             error: true
         })
+        console.log(err)
 
     }
 
     renderItems(arr) {      //обрабатываем полученные данные из джейсона
         return arr.map(item => {
-            const { name, altname, photo, src, alt, description, id } = item;
+            const { name, altname, photo, src, alt, descr, id } = item;
 
             return (
                 //key в данном случае используется для того, чтобы провести рекалькуляцию в случае обновления постов. Это специальный механизм реакта, который позволяет обновлять и добавлять новые данные, не затрагивая старые
@@ -62,7 +64,7 @@ export default class Posts extends Component {
                         {name}
                     </div>
                     <div className='post__descr'>
-                        {description}
+                        {descr}
                     </div>
                 </div>
             )
@@ -72,6 +74,10 @@ export default class Posts extends Component {
 
     render() {
         const { error, posts } = this.state   //вытаскиваем текущее состояние стейта
+
+        if(error) {     //в данном случае, если получаем ошибку, выведем картинку
+            return <ErrorMessage />
+        }
 
         const items = this.renderItems(posts)      //здесь лежат все посты, которые сгенерировались. potst - все посты, которые в данный момент лежат внутри стейта
 
