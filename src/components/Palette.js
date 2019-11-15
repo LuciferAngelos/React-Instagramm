@@ -3,14 +3,15 @@ import InstaService from '../services/instaService'
 import ErrorMessage from './Error'
 
 
-class Palette extends React.Component{
-    InstaService = new InstaService();  
+class Palette extends React.Component {
+    InstaService = new InstaService();
     state = {
         error: false,
-        photos: []
+        photos: [],
+        // loading: true
     }
 
-    componentDidMount(){        //получаем фотографии только тогда, когда компонент отрендерился
+    componentDidMount() {        //получаем фотографии только тогда, когда компонент отрендерился
         this.updatePhotos()
     }
 
@@ -22,41 +23,46 @@ class Palette extends React.Component{
 
     //делаем методы через стрелочную функцию, чтобы привязать компонент к контексту вызова и не использовать .bind(this)
 
-    onError = () => {      
+    onError = () => {
         this.setState({
             error: true
         })
     }
 
     //Short Object Notation - когда в аргументе название совпадает с ключом объекта, можно просто написать название ключа\аргумент
-    
+
     onPhotosLoaded = (photos) => {
         this.setState({
             error: false,
-            photos      //Short Object Notation
+            photos,      //Short Object Notation,
+            // loading: false
         })
     }
 
-    renderItems(arr){
+    renderItems(arr) {
         return arr.map(item => {
-            const {src, alt} = item;
-            return(     //при каждом вызове возвращает кусок верстки
+            const { src, alt } = item;
+            return (     //при каждом вызове возвращает кусок верстки
                 <img src={src} alt={alt}></img>
             )
         })
     }
 
-    render(){
-        const {error, photos} = this.state;
-        
-        if(error){
+    render() {
+        const { error, photos } = this.state;
+
+        if (error) {
             return <ErrorMessage />
         }
 
+        // if (loading) {
+        //     //здесь можно добавить, к примеру, лоадер во время перехода по страницам
+        // }
+
         const items = this.renderItems(photos)
 
-        return(
-            
+        return (
+
             <div className='palette'>
                 {items}
             </div>
